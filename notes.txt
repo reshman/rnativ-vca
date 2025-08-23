@@ -1,0 +1,28 @@
+command for apk build
+========================
+cd android
+./gradlew assembleRelease
+adb install -r app/build/outputs/apk/release/app-release.apk
+
+rebuild native projects (cleans up bad prebuilds)
+=====================================================
+npx expo prebuild --clean
+
+launch Metro for the custom client (NOT Expo Go)
+=========================
+npx expo start --dev-client
+
+to make build debug for android
+===============================
+npx expo run:android
+
+run from android
+==================
+npx expo start
+
+
+allow incoming traffic to port 8080 on your machine from any IP.
+=============================
+sudo ufw allow 8080
+
+
