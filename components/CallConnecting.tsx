@@ -215,38 +215,33 @@ const CallConnecting = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>CallConnecting</Text>
+      <Text style={styles.title}>Call Connecting</Text>
+
+      {/* Local preview */}
+      {localStream ? (
+        <RTCView streamURL={localStream.toURL()} style={styles.videoLocal} objectFit="cover" mirror />
+      ) : (
+        <View style={[styles.videoLocal, styles.placeholder]}><Text>Local preview</Text></View>
+      )}
+
+      <Text style={styles.section}>Remote</Text>
+
+      {/* Remote video */}
+      {remoteStream ? (
+        <RTCView key={remoteStream.id} streamURL={remoteStream.toURL()} style={styles.videoRemote} objectFit="cover" />
+      ) : (
+        <View style={[styles.videoRemote, styles.placeholder]}><Text>Remote video will appear here</Text></View>
+      )}
+
+      <View style={styles.btnRow}>
+        <TouchableOpacity style={[styles.btn, styles.danger]} onPress={hangup}>
+          <Text style={styles.btnText}>Hangup</Text>
+        </TouchableOpacity>
       </View>
 
-      <View>
-        {localStream && (
-          <RTCView
-            streamURL={localStream.toURL()}
-            style={styles.videoLocal}
-            objectFit="cover"
-            mirror
-          />
-        )}
-
-        <Text style={styles.section}>Remote</Text>
-        {remoteStream ? (
-          <RTCView
-            key={remoteStream.id}
-            streamURL={remoteStream.toURL()}
-            style={styles.videoRemote}
-            objectFit="cover"
-          />
-        ) : (
-          <View style={styles.placeholder}>
-            <Text>Remote video will appear here</Text>
-          </View>
-        )}
-      </View>
-
-      <TouchableOpacity style={styles.endBtn} onPress={hangup}>
-        <Text style={styles.callBtnText}>Back</Text>
-      </TouchableOpacity>
+      <Text style={styles.hint}>
+        Open this screen on two devices. Both must connect to the same WS URL and room. One taps “Start Call”.
+      </Text>
     </View>
   );
 };
@@ -255,52 +250,42 @@ export default CallConnecting;
 
 /* ------------------- Styles ------------------- */
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  header: { alignItems: "center", marginBottom: 8 },
-  title: { fontSize: 20, fontWeight: "600" },
-  section: { fontWeight: "600", marginTop: 10, marginBottom: 6 },
+  container: { flex: 1, padding: 16, gap: 10 },
+  title: { fontSize: 18, fontWeight: "700", textAlign: "center", marginBottom: 4 },
+  section: { fontWeight: "600", marginTop: 8, marginBottom: 4 },
   videoLocal: {
     width: "100%",
     height: 200,
     borderRadius: 8,
     backgroundColor: "#000",
+    overflow: "hidden",
   },
   videoRemote: {
     width: "100%",
     height: 260,
     borderRadius: 8,
     backgroundColor: "#000",
+    overflow: "hidden",
   },
   placeholder: {
-    height: 260,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#999",
-    padding: 8,
-    justifyContent: "center",
+    borderWidth: 1, borderColor: "#999", alignItems: "center", justifyContent: "center",
   },
-  callBtn: {
-    backgroundColor: "#2e7d32",
-    height: 44,
-    minWidth: 160,
-    borderRadius: 8,
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 4,
-    marginTop: 16,
-  },
-  endBtn: {
-    backgroundColor: "red",
-    height: 44,
-    minWidth: 120,
-    borderRadius: 8,
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 4,
+  btnRow: {
     marginTop: 12,
-    marginBottom: 24,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 10,
   },
-  callBtnText: { fontWeight: "600", color: "#fff" },
+  btn: {
+    height: 44,
+    flex: 1,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+  },
+  primary: { backgroundColor: "#2563eb" },
+  danger: { backgroundColor: "#ef4444" },
+  btnText: { color: "#fff", fontWeight: "700" },
+  hint: { textAlign: "center", fontSize: 12, color: "#555", marginTop: 8 },
 });
