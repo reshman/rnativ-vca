@@ -215,38 +215,36 @@ const CallConnecting = () => {
 
   return (
     <View style={styles.container}>
-      {/* Center only the title */}
-      <View style={styles.content}>
+      <View style={styles.header}>
         <Text style={styles.title}>CallConnecting</Text>
       </View>
 
       <View>
-        {localStream ? (
+        {localStream && (
           <RTCView
             streamURL={localStream.toURL()}
-            style={{ width: '100%', height: 200 }}
+            style={styles.videoLocal}
             objectFit="cover"
             mirror
           />
-        ) : null}
-
+        )}
 
         <Text style={styles.section}>Remote</Text>
         {remoteStream ? (
           <RTCView
+            key={remoteStream.id}
             streamURL={remoteStream.toURL()}
-            style={{ width: '100%', height: 260, borderRadius: 8 }}
+            style={styles.videoRemote}
             objectFit="cover"
           />
         ) : (
-          <View style={{ height: 260, borderRadius: 8, borderWidth: 1, borderColor: '#999', padding: 8 }}>
+          <View style={styles.placeholder}>
             <Text>Remote video will appear here</Text>
           </View>
         )}
       </View>
 
-      {/* Button stays at the bottom, centered horizontally */}
-      <TouchableOpacity style={styles.callBtn} onPress={hangup}>
+      <TouchableOpacity style={styles.endBtn} onPress={hangup}>
         <Text style={styles.callBtnText}>Back</Text>
       </TouchableOpacity>
     </View>
@@ -255,39 +253,54 @@ const CallConnecting = () => {
 
 export default CallConnecting;
 
+/* ------------------- Styles ------------------- */
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
+  container: { flex: 1, padding: 16 },
+  header: { alignItems: "center", marginBottom: 8 },
+  title: { fontSize: 20, fontWeight: "600" },
+  section: { fontWeight: "600", marginTop: 10, marginBottom: 6 },
+  videoLocal: {
+    width: "100%",
+    height: 200,
+    borderRadius: 8,
+    backgroundColor: "#000",
   },
-  // This takes remaining space so the button sits below it
-  content: {
-    flex: 1,
+  videoRemote: {
+    width: "100%",
+    height: 260,
+    borderRadius: 8,
+    backgroundColor: "#000",
+  },
+  placeholder: {
+    height: 260,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#999",
+    padding: 8,
     justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "600",
-    textAlign: "center",
   },
   callBtn: {
-    backgroundColor: "red",
-    height: 40,
-    minWidth: 120,
+    backgroundColor: "#2e7d32",
+    height: 44,
+    minWidth: 160,
     borderRadius: 8,
-    alignSelf: "center",     // center horizontally
+    alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
-    elevation: 5,
-    marginBottom: 24,        // give some bottom space
+    elevation: 4,
+    marginTop: 16,
   },
-  callBtnText: {
-    fontWeight: "600",
-    color: "#ffffff",
+  endBtn: {
+    backgroundColor: "red",
+    height: 44,
+    minWidth: 120,
+    borderRadius: 8,
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 4,
+    marginTop: 12,
+    marginBottom: 24,
   },
-
-  video: { width: '100%', height: 220, backgroundColor: '#000', borderRadius: 12 },
-  placeholder: { width: '100%', height: 220, borderRadius: 12, borderWidth: 1},
-  section: { fontWeight: '600', marginTop: 10, marginBottom: 6 },
+  callBtnText: { fontWeight: "600", color: "#fff" },
 });
